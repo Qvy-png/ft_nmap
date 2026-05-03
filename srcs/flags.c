@@ -20,7 +20,7 @@ int	flag_syntax_checker(char *str)
 // for --file, needs to be a viable linux file (please search online for that)
 int	check_file(char *str)
 {
-
+	(void)str;
 	return EXIT_SUCCESS;
 }
 
@@ -55,6 +55,7 @@ int check_ports(char *str)
 // for --scan, needs only uppercase alpha, ',' and must be a valid flag between SYN, NULL, ACK, FIN, XMAS, and UDP
 int	check_scan(char *str)
 {
+	(void)str;
 
 	return EXIT_SUCCESS;
 }
@@ -63,6 +64,7 @@ int	check_scan(char *str)
 // for --speedup needs only numbers, and must be in range 0-250
 int	check_speedup(char *str)
 {
+	(void)str;
 
 	return EXIT_SUCCESS;
 }
