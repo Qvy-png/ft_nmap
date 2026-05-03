@@ -22,14 +22,14 @@
 
 // TCP FLAGS
 # define SYN	0x02
-# define NULL	0x00
+//		 NULL	0x00
 # define ACK	0x10
 # define FIN	0x01
 # define XMAS	0x29
 
 
 // STRUCTURES
-struct iphdr {
+struct	iphdr {
 
     unsigned	char	ihl : 4;		// Header length (5 = 20 bytes)
     unsigned	char	version : 4;	// Version (4 for IPv4)
@@ -44,7 +44,7 @@ struct iphdr {
     struct		in_addr	daddr;			// Destination IP (target IP)
 };
 
-struct tcphdr {
+struct	tcphdr {
 
     unsigned	short	source;			// Source port (random high port)
     unsigned	short	dest;			// Destination port (e.g., 80, 443)
@@ -57,5 +57,29 @@ struct tcphdr {
     unsigned	short	check;			// TCP checksum (calculated later)
     unsigned	short	urg_ptr;		// Urgent pointer (0)
 };
+
+struct	nmap_luggage {
+
+	char				*ports;			// Contains the ports range
+	char				*IP;			// Target IP
+	char				*file;			// File containing targets
+	unsigned	int		*speedup;		// Number of threads
+	char				*flags;			// String with FLAGS
+};
+
+
+
+// FUNCTIONS //
+
+// UTILS
+void	print_help(void);
+void	free_struct(struct nmap_luggage *l);
+
+
+// PORTS
+int		check_ports(char *nums);
+
+
+
 
 #endif

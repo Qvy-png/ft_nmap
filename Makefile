@@ -8,8 +8,9 @@ RM = rm
 
 OBJ = $(SRC:.c=.o)
 
-SRC =	srcs/main.c	\
-		srcs/utils.c	
+SRC =	srcs/main.c		\
+		srcs/utils.c	\
+		srcs/ports.c
 		
 INCL =	includes/ft_nmap.h
 

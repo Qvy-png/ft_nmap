@@ -1,6 +1,6 @@
 #include "../includes/ft_nmap.h"
 
-void print_help( void )
+void print_help(void)
 {
 	// INTRO
 	printf("------------------------------------------------------------\n");
@@ -20,4 +20,16 @@ void print_help( void )
 	printf("--file		File name containing IP addresses to scan\n");
 	printf("--speedup	Amount of parallel threads to use [1-250]\n");
 	printf("--scan		SYN/NULL/FIN/XMAS/ACK/UDP\n");
+}
+
+void	free_struct(struct nmap_luggage *l)
+{
+	if (l->ports)
+		free(l->ports);
+	if (l->IP)
+		free(l->IP);
+	if (l->flags)
+		free(l->flags);
+	if (l->speedup)
+		free(l->speedup);
 }
