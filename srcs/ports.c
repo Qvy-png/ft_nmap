@@ -1,17 +1,17 @@
 #include "../includes/ft_nmap.h"
 
-int	check_ports(char *nums)
+// check for allowed chars
+int	check_ports_char(char *str)
 {
 	int i;
 
 	i = 0;
-	while (nums[i] != '\0')
+	while (str[i] != '\0')
 	{
-		if ((nums[i] >= 48 && nums[i] <= 57) || nums[i] == 45 || nums[i] == 44)
+		if ((str[i] >= 48 && str[i] <= 57) || str[i] == 45 || str[i] == 44)
 			i++;
 		else
 			return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
-

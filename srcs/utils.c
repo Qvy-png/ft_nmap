@@ -1,6 +1,6 @@
 #include "../includes/ft_nmap.h"
 
-void print_help(void)
+void    print_help(void)
 {
 	// INTRO
 	printf("------------------------------------------------------------\n");
@@ -32,4 +32,13 @@ void	free_struct(struct nmap_luggage *l)
 		free(l->flags);
 	if (l->speedup)
 		free(l->speedup);
+}
+
+int     ft_strcmp(char *s1, char *s2)
+{
+	int i = 0;
+
+	while((s1[i] == s2[i]) && s1[i] && s2[i])
+		i++;
+	return (s1[i]-s2[i]);
 }

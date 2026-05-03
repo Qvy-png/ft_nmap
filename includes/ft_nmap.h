@@ -27,6 +27,14 @@
 # define FIN	0x01
 # define XMAS	0x29
 
+// ARG FLAGS
+# define ARG_IP			"--ip"
+# define ARG_FILE		"--file"
+# define ARG_SCAN		"--scan"
+# define ARG_PORTS		"--ports"
+# define ARG_SPEEDUP	"--speedup"
+
+
 
 // STRUCTURES
 struct	iphdr {
@@ -73,13 +81,21 @@ struct	nmap_luggage {
 
 // UTILS
 void	print_help(void);
+int     ft_strcmp(char *s1, char *s2);
 void	free_struct(struct nmap_luggage *l);
 
 
 // PORTS
-int		check_ports(char *nums);
+int		check_ports_char(char *str);
 
+// FLAGS
+int		check_ip(char *str);
+int		check_file(char *str);
+int		check_ports(char *str);
+int		check_scan(char *str);
+int		check_speedup(char *str);
 
+int		flag_syntax_checker(char *str);
 
 
 #endif
