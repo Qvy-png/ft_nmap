@@ -20,21 +20,42 @@
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
+// TCP FLAGS
+# define SYN	0x02
+# define NULL	0x00
+# define ACK	0x10
+# define FIN	0x01
+# define XMAS	0x29
+
+
 // STRUCTURES
 struct iphdr {
-    unsigned char ihl : 4;			// Header length (5 = 20 bytes)
-    unsigned char version : 4;		// Version (4 for IPv4)
-    unsigned char tos;				// Type of service (usually 0)
-    unsigned short tot_len;			// Total length (IP header + payload)
-    unsigned short id;				// Packet ID (set to a random value)
-    unsigned short frag_off;		// Fragment offset (usually 0)
-    unsigned char ttl;				// Time to live (e.g., 64)
-    unsigned char protocol;			// TCP = 6
-    unsigned short check;			// IP checksum (calculated later)
-    struct in_addr saddr;			// Source IP (your IP)
-    struct in_addr daddr;			// Destination IP (target IP)
+
+    unsigned	char	ihl : 4;		// Header length (5 = 20 bytes)
+    unsigned	char	version : 4;	// Version (4 for IPv4)
+    unsigned	char	tos;			// Type of service (usually 0)
+    unsigned	short	tot_len;		// Total length (IP header + payload)
+    unsigned	short	id;				// Packet ID (set to a random value)
+    unsigned	short	frag_off;		// Fragment offset (usually 0)
+    unsigned	char	ttl;			// Time to live (e.g., 64)
+    unsigned	char	protocol;		// TCP = 6
+    unsigned	short	check;			// IP checksum (calculated later)
+    struct		in_addr	saddr;			// Source IP (your IP)
+    struct		in_addr	daddr;			// Destination IP (target IP)
 };
 
+struct tcphdr {
 
+    unsigned	short	source;			// Source port (random high port)
+    unsigned	short	dest;			// Destination port (e.g., 80, 443)
+    unsigned	int		seq;			// Sequence number (random)
+    unsigned	int		ack_seq;		// Acknowledgment number (0 for SYN)
+    unsigned	char	doff : 4;		// Data offset (5 = 20 bytes)
+    unsigned	char	res1 : 4;		// Reserved (0)
+    unsigned	short	flags;			// TCP flags (SYN = 0x02)
+    unsigned	short	window;			// Window size (e.g., 5840)
+    unsigned	short	check;			// TCP checksum (calculated later)
+    unsigned	short	urg_ptr;		// Urgent pointer (0)
+};
 
 #endif
