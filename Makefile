@@ -11,7 +11,8 @@ OBJ = $(SRC:.c=.o)
 SRC =	srcs/main.c		\
 		srcs/utils.c	\
 		srcs/ports.c	\
-		srcs/flags.c
+		srcs/flags.c	\
+		srcs/luggage.c
 		
 INCL =	includes/ft_nmap.h
 

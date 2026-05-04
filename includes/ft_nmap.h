@@ -17,6 +17,7 @@
 
 
 // EXITS
+# define EXIT_UNKNOWN 2
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0
 
@@ -81,9 +82,14 @@ struct	nmap_luggage {
 
 // UTILS
 void	print_help(void);
+int		ft_tolower(int c);
+char    *ft_strdup(char *src);
 int     ft_strcmp(char *s1, char *s2);
-void	free_struct(struct nmap_luggage *l);
 
+// LUGGAGE (helper structure for nmap)
+void	free_luggage(struct nmap_luggage *l);
+void	luggage_init(struct nmap_luggage *l);
+int		terminator(struct nmap_luggage *l, int ret);
 
 // PORTS
 int		check_ports_char(char *str);

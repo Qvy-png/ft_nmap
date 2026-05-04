@@ -13,25 +13,12 @@ void    print_help(void)
 	printf("ft_nmap [--help] [--ports [NUMBER/RANGED]] --file FILE [--speedup [NUMBER]] [--scan [TYPE]]\n\n");
 
 	// USAGE DESCRIPTION
-
 	printf("--help		Print this help screen\n");
 	printf("--ports		Ports to scan (eg: 1-10 or 1,2,3 or 1,5-15)\n");
 	printf("--ip		IP addresses to scan in dot format\n");
 	printf("--file		File name containing IP addresses to scan\n");
 	printf("--speedup	Amount of parallel threads to use [1-250]\n");
 	printf("--scan		SYN/NULL/FIN/XMAS/ACK/UDP\n");
-}
-
-void	free_struct(struct nmap_luggage *l)
-{
-	if (l->ports)
-		free(l->ports);
-	if (l->IP)
-		free(l->IP);
-	if (l->flags)
-		free(l->flags);
-	if (l->speedup)
-		free(l->speedup);
 }
 
 int     ft_strcmp(char *s1, char *s2)
@@ -41,4 +28,31 @@ int     ft_strcmp(char *s1, char *s2)
 	while((s1[i] == s2[i]) && s1[i] && s2[i])
 		i++;
 	return (s1[i]-s2[i]);
+}
+
+int		ft_tolower(int c)
+{
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
+
+char *ft_strdup(char *src)
+{
+	int		i = 0;
+	char	*res;
+
+	while(src[i])
+		i++;
+	res = (char*)malloc(sizeof(*res) * i + 1);
+	if (res == NULL)
+		return (NULL);
+	i = 0;
+	while(src[i])
+	{
+		res[i]=src[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
 }
