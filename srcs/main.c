@@ -95,22 +95,21 @@ int main(int argc, char **argv)
 
 	l = malloc(sizeof(struct nmap_luggage) + 1);
 	if (l == NULL)
-		return (EXIT_FAILURE);
+		return EXIT_FAILURE;
 	luggage_init(l);
 
 	if (handle_args(argv, l) == EXIT_FAILURE)
-		return (terminator(l, EXIT_FAILURE));
+		return terminator(l, EXIT_FAILURE);
 
 	printf("Hi\n");
-	return (terminator(l, EXIT_SUCCESS));
 
 
 	// TODO put this in a function and handle clean exit if failure
-	int raw_socket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-	if (raw_socket < 0) {
-		perror("Socket creation failed");
-		exit(EXIT_FAILURE);
-	}
+	// int raw_socket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+	// if (raw_socket < 0) {
+	// 	perror("Socket creation failed");
+	// 	exit(EXIT_FAILURE);
+	// }
 
-	return (terminator(l, EXIT_SUCCESS));
+	return terminator(l, EXIT_SUCCESS);
 }

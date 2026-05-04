@@ -16,25 +16,33 @@ int	flag_syntax_checker(char *str)
 	return EXIT_SUCCESS;
 }
 
-//TODO
+//DONE
 // for --file, needs to be a viable linux file (please search online for that)
 // Sounds like it could be anything, as long as it fits in the terminal and that it can be opened.. lol
 // the file MUST contain a single value per line,
 // and can only contain standard domain name characters, numbers or/and '.'
 
+// TODO
 // so for the todo, gotta open file, check each line for valid hostnames.
+// perhaps use gethostbyname ?
 // if any hostname poops pants, tactical exit
 
 int	check_file(char *str)
 {
-	(void)str;
+	if (access(str, F_OK | R_OK ) == EXIT_FAILURE)
+		return EXIT_FAILURE;
+
+	
 	return EXIT_SUCCESS;
 }
 
 // TODO needs to check for length of hostname/domain-name/valid IP
+// or perhaps use gethostbyname ?
+
 // length would be [2-63] chars, before .smth, example : hi.com, aaa-aaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com
 // so it would be alphanumerical, all handled as lowercase (even if uppercase is being written), with '.' and '-' allowed.
 // valid IP would be 4 sets of numbers in range 1-255, separated by '.'
+
 int	check_ip(char *str)
 {
 	int		i;
@@ -76,11 +84,22 @@ int	check_scan(char *str)
 	return EXIT_SUCCESS;
 }
 
-//TODO
-// for --speedup needs only numbers, and must be in range 0-250
 int	check_speedup(char *str)
 {
-	(void)str;
+	int	i;
+	int	num;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] >= '0' && str[i] <= '9')
+			i++;
+		else
+			return EXIT_FAILURE;
+	}
+	num = atoi(str);
+	if (num < 0 || num > 250)
+		return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
 }
