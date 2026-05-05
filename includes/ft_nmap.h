@@ -40,7 +40,6 @@
 # define ARG_SPEEDUP	"--speedup"
 
 
-
 // STRUCTURES
 struct	iphdr {
 

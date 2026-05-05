@@ -1,12 +1,5 @@
 #include "../includes/ft_nmap.h"
 
-// Allowed flags : --ip OR --file, --ports, --speedup, --scan, --help 
-// If flag --help found, print_help() and exit
-
-
-// TODO add nmap_luggage in arguments to gather the flag values
-// requirements for flags handling :
-//	can only be ports, ip or file, scan, speedup
 int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 {
 	int	ret;
@@ -81,6 +74,8 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 	{
 		if (argv[i][0] == '-')
 		{
+			if (ft_strcmp(argv[i], "--help") == 0)
+				return (print_help(), EXIT_FAILURE);
 			if (flag_syntax_checker(argv[i]) == EXIT_SUCCESS)
 			{
 				if (argv[i+1] != NULL)
