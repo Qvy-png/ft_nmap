@@ -18,6 +18,7 @@
 
 
 // EXITS
+# define EXIT_MALLOCS 3
 # define EXIT_UNKNOWN 2
 # define EXIT_FAILURE 1
 # define EXIT_SUCCESS 0

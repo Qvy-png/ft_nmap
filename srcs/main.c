@@ -9,17 +9,27 @@
 //	can only be ports, ip or file, scan, speedup
 int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 {
+	int	ret;
+
+	ret = -1;
 	if (ft_strcmp(flag, ARG_IP) == 0)
 	{
 		if (check_ip(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 		else
+		{
 			l->IP = ft_strdup(arg);
+			if (l->IP == NULL)
+				return EXIT_MALLOCS;
+		}
 	}
 	else if (ft_strcmp(flag, ARG_FILE) == 0)
 	{
-		if (check_file(arg, l) == EXIT_FAILURE)
+		ret = check_file(arg, l);
+		if (ret == EXIT_FAILURE)
 			return EXIT_FAILURE;
+		else if (ret == EXIT_MALLOCS)
+			return EXIT_MALLOCS;
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
 	{
@@ -61,7 +71,9 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 						i++;
 					else
 					{
-						if (ret_matcher == EXIT_FAILURE)
+						if (ret_matcher == EXIT_MALLOCS)
+							return EXIT_MALLOCS;
+						else if (ret_matcher == EXIT_FAILURE)
 							printf("The flag `%s` doesn't match with the argument `%s`... \nSomething's wrong with your syntax, I can feel it...\n", argv[i], argv[i + 1]);
 						else
 							printf("Mate, that flag `%s` doens't exist, please have a look at the --help flag.. \n", argv[i]);
@@ -85,6 +97,7 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 
 int main(int argc, char **argv)
 {
+	int					ret_arg;
 	struct nmap_luggage	*l;
 
 	if (argc <= 1)
@@ -95,11 +108,14 @@ int main(int argc, char **argv)
 
 	l = malloc(sizeof(struct nmap_luggage) + 1);
 	if (l == NULL)
-		return EXIT_FAILURE;
+		return EXIT_MALLOCS;
 	luggage_init(l);
 
-	if (handle_args(argv, l) == EXIT_FAILURE)
+	ret_arg = handle_args(argv, l);
+	if (ret_arg == EXIT_FAILURE)
 		return terminator(l, EXIT_FAILURE);
+	else if (ret_arg == EXIT_MALLOCS)
+		return (printf("Stopping here, memory allocation has failed somewhere..\n"), terminator(l, EXIT_MALLOCS));
 
 
 	// TODO put this in a function and handle clean exit if failure

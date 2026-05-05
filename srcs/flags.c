@@ -81,7 +81,7 @@ int	check_file(char *str, struct nmap_luggage *l)
 
 	file_content = malloc(sizeof(char) * size + 1);
 	if (file_content == NULL)
-		return EXIT_FAILURE;
+		return EXIT_MALLOCS;
 
 	ret = read(fd, buff, 1);
 	while (ret != 0)
@@ -95,8 +95,9 @@ int	check_file(char *str, struct nmap_luggage *l)
 	if (hostname_syntax(file_content) == EXIT_FAILURE)
 		return (free(file_content), EXIT_FAILURE);
 
-	// if file is good, then strdup to luggage
 	l->file = ft_strdup(file_content);
+	if (l->file == NULL)
+		return (free(file_content), EXIT_MALLOCS);
 	free(file_content);
 	return EXIT_SUCCESS;
 }
