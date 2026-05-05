@@ -18,7 +18,7 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	}
 	else if (ft_strcmp(flag, ARG_FILE) == 0)
 	{
-		if (check_file(arg) == EXIT_FAILURE)
+		if (check_file(arg, l) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
@@ -100,8 +100,6 @@ int main(int argc, char **argv)
 
 	if (handle_args(argv, l) == EXIT_FAILURE)
 		return terminator(l, EXIT_FAILURE);
-
-	printf("Hi\n");
 
 
 	// TODO put this in a function and handle clean exit if failure

@@ -16,49 +16,96 @@ int	flag_syntax_checker(char *str)
 	return EXIT_SUCCESS;
 }
 
-//DONE
-// for --file, needs to be a viable linux file (please search online for that)
-// Sounds like it could be anything, as long as it fits in the terminal and that it can be opened.. lol
-// the file MUST contain a single value per line,
-// and can only contain standard domain name characters, numbers or/and '.'
-
-// TODO
-// so for the todo, gotta open file, check each line for valid hostnames.
-// perhaps use gethostbyname ?
-// if any hostname poops pants, tactical exit
-
-int	check_file(char *str)
+int	get_file_size(char *str)
 {
-	if (access(str, F_OK | R_OK ) == EXIT_FAILURE)
-		return EXIT_FAILURE;
-
+	int 	i;
+	int		fd;
+	char	buff[2];
 	
-	return EXIT_SUCCESS;
+	i = 0;
+	fd = -1;
+	fd = open(str, O_RDONLY);
+	if (fd == -1)
+	return -1;
+	while(read(fd, buff, 1) != 0)
+		i++;
+	close(fd);
+	return i;
 }
 
-// TODO needs to check for length of hostname/domain-name/valid IP
-// or perhaps use gethostbyname ?
-
-// length would be [2-63] chars, before .smth, example : hi.com, aaa-aaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.com
-// so it would be alphanumerical, all handled as lowercase (even if uppercase is being written), with '.' and '-' allowed.
-// valid IP would be 4 sets of numbers in range 1-255, separated by '.'
-
-int	check_ip(char *str)
+int	hostname_syntax(char *str)
 {
 	int		i;
 	char	*tmp;
-
+	
 	i = -1;
 	tmp = ft_strdup(str);
 	while (tmp[++i])
-		tmp[i] = ft_tolower(tmp[i]);
+	tmp[i] = ft_tolower(tmp[i]);
 	i = 0;
 	while (tmp[i])
 	{
-		printf("%c", tmp[i]);
+		if ((tmp[i] >= 'a' && tmp[i] <= 'z') || (tmp[i] >= '0' && tmp[i] <= '9') || tmp[i] == '.' || tmp[i] == '-' || tmp[i] == '\n' || tmp[i] == '\0')
+			i++;
+		else
+			return (free(tmp), EXIT_FAILURE);
+	}
+	return (free(tmp), EXIT_SUCCESS);
+}
+
+// for --file, as long as it fits in the terminal and that it can be opened.. lol
+// can only contain standard domain name characters, numbers or/and '.'
+// if any hostname poops pants, tactical exit
+int	check_file(char *str, struct nmap_luggage *l)
+{
+	int		fd;
+	int		i;
+	int		ret;
+	int		size;
+	char	buff[2];
+	char	*file_content;
+
+	i = 0;
+	ret = -1;
+	fd = -1;
+	if (access(str, F_OK | R_OK ) == EXIT_FAILURE)
+		return EXIT_FAILURE;
+
+	size = get_file_size(str);
+	if (size == -1)
+		return EXIT_FAILURE;
+
+	fd = open(str, O_RDONLY);
+	if (fd == -1)
+		return EXIT_FAILURE;
+
+	file_content = malloc(sizeof(char) * size + 1);
+	if (file_content == NULL)
+		return EXIT_FAILURE;
+
+	ret = read(fd, buff, 1);
+	while (ret != 0)
+	{
+		file_content[i] = buff[0];
+		ret = read(fd, buff, 1);
 		i++;
 	}
-	free(tmp);
+	file_content[i] = '\0';
+
+	if (hostname_syntax(file_content) == EXIT_FAILURE)
+		return (free(file_content), EXIT_FAILURE);
+
+	// if file is good, then strdup to luggage
+	l->file = ft_strdup(file_content);
+	free(file_content);
+	return EXIT_SUCCESS;
+}
+
+// just calls for hostname_syntax, function name kept for compatibility
+int	check_ip(char *str)
+{
+	if (hostname_syntax(str) == EXIT_FAILURE)
+		return EXIT_FAILURE;
 	return EXIT_SUCCESS;
 }
 

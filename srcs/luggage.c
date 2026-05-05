@@ -15,6 +15,8 @@ void	free_luggage(struct nmap_luggage *l)
 		free(l->ports);
 	if (l->IP)
 		free(l->IP);
+	if (l->file)
+		free(l->file);
 	if (l->flags)
 		free(l->flags);
 	if (l->speedup)

@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <time.h>
+# include <fcntl.h>
 
 // thread libraries
 # include <pthread.h>
@@ -71,7 +72,7 @@ struct	nmap_luggage {
 
 	char				*ports;			// Contains the ports range
 	char				*IP;			// Target IP
-	char				*file;			// File containing targets
+	char				*file;			// File content
 	unsigned	int		*speedup;		// Number of threads
 	char				*flags;			// String with FLAGS
 };
@@ -96,9 +97,15 @@ int		check_ports_char(char *str);
 
 // FLAGS
 int		check_ip(char *str);
-int		check_file(char *str);
+
+int     get_file_size(char *str);
+int     file_content_check(char *str);
+int		check_file(char *str, struct nmap_luggage *l);
+
 int		check_ports(char *str);
+
 int		check_scan(char *str);
+
 int		check_speedup(char *str);
 
 int		flag_syntax_checker(char *str);
