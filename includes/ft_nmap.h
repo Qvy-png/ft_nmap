@@ -18,6 +18,8 @@
 
 
 // EXITS
+# define EXIT_CHOOSER 5
+# define EXIT_DOUBLES 4
 # define EXIT_MALLOCS 3
 # define EXIT_UNKNOWN 2
 # define EXIT_FAILURE 1

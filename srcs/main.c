@@ -14,6 +14,11 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	ret = -1;
 	if (ft_strcmp(flag, ARG_IP) == 0)
 	{
+		if (l->file != NULL)
+			return EXIT_CHOOSER;
+		if (l->IP != NULL)
+			return EXIT_DOUBLES;
+
 		if (check_ip(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 		else
@@ -25,6 +30,11 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	}
 	else if (ft_strcmp(flag, ARG_FILE) == 0)
 	{
+		if (l->IP != NULL)
+			return EXIT_CHOOSER;
+		if (l->file != NULL)
+			return EXIT_DOUBLES;
+
 		ret = check_file(arg, l);
 		if (ret == EXIT_FAILURE)
 			return EXIT_FAILURE;
@@ -33,16 +43,25 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
 	{
+		if (l->flags != NULL)
+			return EXIT_DOUBLES;
+
 		if (check_scan(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 	}
 	else if (ft_strcmp(flag, ARG_PORTS) == 0)
 	{
+		if (l->ports != NULL)
+			return EXIT_DOUBLES;
+	
 		if (check_ports(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 	}
 	else if (ft_strcmp(flag, ARG_SPEEDUP) == 0)
 	{
+		if (l->speedup != NULL)
+			return EXIT_DOUBLES;
+	
 		if (check_speedup(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 	}
@@ -71,7 +90,11 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 						i++;
 					else
 					{
-						if (ret_matcher == EXIT_MALLOCS)
+						if (ret_matcher == EXIT_DOUBLES)
+							return (printf("You can only use `%s` once, please check your command\n", argv[i]), EXIT_FAILURE);
+						else if (ret_matcher == EXIT_CHOOSER)
+							return (printf("`--file` or `--ip`, there ain't no wonderland..\n"), EXIT_FAILURE);
+						else if (ret_matcher == EXIT_MALLOCS)
 							return EXIT_MALLOCS;
 						else if (ret_matcher == EXIT_FAILURE)
 							printf("The flag `%s` doesn't match with the argument `%s`... \nSomething's wrong with your syntax, I can feel it...\n", argv[i], argv[i + 1]);
