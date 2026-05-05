@@ -110,15 +110,19 @@ int	check_ip(char *str)
 	return EXIT_SUCCESS;
 }
 
+
 // TODO
-// for --ports, needs only numbers, ',' and '-', and must be in range 1-1024. total scanned number cannot exceed 1024 ports
+// for --ports, needs only numbers, ',' and '-', and must be in range 1-1024 by default. total scanned number cannot exceed 1024 ports
+// for a range, handle when the range is upside down (first bigger than second) the way it's written, as in, counting down.
 int check_ports(char *str)
 {
 	if (check_ports_char(str) == EXIT_FAILURE)
 		return EXIT_FAILURE;
 	// needs to check numbers from range
 
-	// needs to check total number of ports scanned(?)
+
+	// needs to check total number of ports scanned
+
 
 	return EXIT_SUCCESS;
 }
