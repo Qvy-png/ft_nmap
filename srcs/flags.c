@@ -111,24 +111,28 @@ int	check_ip(char *str)
 }
 
 
-// TODO
 // for --ports, needs only numbers, ',' and '-', and must be in range 1-1024 by default. total scanned number cannot exceed 1024 ports
-// for a range, handle when the range is upside down (first bigger than second) the way it's written, as in, counting down.
-int check_ports(char *str)
+// for a range, don't handle when the range is upside down (first bigger than second).
+// 0 (zero) is also not a valid value, and a port cannot exceed 65535.
+int check_ports(char *str, struct nmap_luggage *l)
 {
-	if (check_ports_char(str) == EXIT_FAILURE)
-		return EXIT_FAILURE;
+	int	ret;
+
+	// if (check_ports_char(str) == EXIT_FAILURE)
+	// 	return EXIT_FAILURE;
 	// needs to check numbers from range
-
-
-	// needs to check total number of ports scanned
-
+	ret = count_numbers(str, l);
+	if (ret == -2)
+		return EXIT_MALLOCS;
+	else if (ret == -1)
+		return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
 }
 
 //TODO
 // for --scan, needs only uppercase alpha, ',' and must be a valid flag between SYN, NULL, ACK, FIN, XMAS, and UDP
+// TODO put it in a 2D array to easily navigate through the flags to use
 int	check_scan(char *str)
 {
 	(void)str;
@@ -155,3 +159,5 @@ int	check_speedup(char *str)
 
 	return EXIT_SUCCESS;
 }
+
+

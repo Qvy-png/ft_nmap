@@ -7,12 +7,15 @@ void	luggage_init(struct nmap_luggage *l)
 	l->flags = NULL;
 	l->ports = NULL;
 	l->speedup = NULL;
+	l->ports_num = NULL;
 }
 
 void	free_luggage(struct nmap_luggage *l)
 {
 	if (l->ports)
 		free(l->ports);
+	if (l->ports_num)
+		free(l->ports_num);
 	if (l->IP)
 		free(l->IP);
 	if (l->file)

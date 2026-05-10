@@ -6,7 +6,7 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 
 	ret = -1;
 	if (ft_strcmp(flag, ARG_IP) == 0)
-	{
+	{  //TODO check if values are filled up in struct
 		if (l->file != NULL)
 			return EXIT_CHOOSER;
 		if (l->IP != NULL)
@@ -22,7 +22,7 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 		}
 	}
 	else if (ft_strcmp(flag, ARG_FILE) == 0)
-	{
+	{ //TODO check if values are filled up in struct
 		if (l->IP != NULL)
 			return EXIT_CHOOSER;
 		if (l->file != NULL)
@@ -35,7 +35,7 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 			return EXIT_MALLOCS;
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
-	{
+	{ //TODO do that 
 		if (l->flags != NULL)
 			return EXIT_DOUBLES;
 
@@ -46,12 +46,12 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	{
 		if (l->ports != NULL)
 			return EXIT_DOUBLES;
-	
-		if (check_ports(arg) == EXIT_FAILURE)
+		// TODO check if both ports and ports_num are filled up. You might not need l->ports in the future though.
+		if (check_ports(arg, l) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 	}
 	else if (ft_strcmp(flag, ARG_SPEEDUP) == 0)
-	{
+	{ // TODO add the speedup in the struct
 		if (l->speedup != NULL)
 			return EXIT_DOUBLES;
 	
@@ -134,8 +134,12 @@ int main(int argc, char **argv)
 		return terminator(l, EXIT_FAILURE);
 	else if (ret_arg == EXIT_MALLOCS)
 		return (printf("Stopping here, memory allocation has failed somewhere..\n"), terminator(l, EXIT_MALLOCS));
+	
+	//TODO check if the minimum amount of flags have been gathered to proceed with packet forming
+	//TODO if no port has been input, initialize to ports 1-1024 by default, fill l->ports and l->ports_num
+	//TODO do a little vizualizer function to go through the struct and display the data
 
-
+	printf("hello world?\n");
 	// TODO put this in a function and handle clean exit if failure
 	// int raw_socket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
 	// if (raw_socket < 0) {

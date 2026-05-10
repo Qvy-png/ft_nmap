@@ -73,6 +73,7 @@ struct	tcphdr {
 struct	nmap_luggage {
 
 	char				*ports;			// Contains the ports range
+    int                 *ports_num;     // int values of ports, unsorted
 	char				*IP;			// Target IP
 	char				*file;			// File content
 	unsigned	int		*speedup;		// Number of threads
@@ -80,12 +81,12 @@ struct	nmap_luggage {
 };
 
 
-
 // FUNCTIONS //
 
 // UTILS
 void	print_help(void);
 int		ft_tolower(int c);
+int     ft_strlen(char *str);
 char    *ft_strdup(char *src);
 int     ft_strcmp(char *s1, char *s2);
 
@@ -95,7 +96,9 @@ void	luggage_init(struct nmap_luggage *l);
 int		terminator(struct nmap_luggage *l, int ret);
 
 // PORTS
+int     count_numbers(char *input, struct nmap_luggage *l);
 int		check_ports_char(char *str);
+
 
 // FLAGS
 int		check_ip(char *str);
@@ -104,7 +107,7 @@ int     get_file_size(char *str);
 int     file_content_check(char *str);
 int		check_file(char *str, struct nmap_luggage *l);
 
-int		check_ports(char *str);
+int		check_ports(char *str, struct nmap_luggage *l);
 
 int		check_scan(char *str);
 
