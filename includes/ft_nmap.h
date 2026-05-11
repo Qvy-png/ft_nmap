@@ -43,41 +43,42 @@
 // STRUCTURES
 struct	iphdr {
 
-    unsigned	char	ihl : 4;		// Header length (5 = 20 bytes)
-    unsigned	char	version : 4;	// Version (4 for IPv4)
-    unsigned	char	tos;			// Type of service (usually 0)
-    unsigned	short	tot_len;		// Total length (IP header + payload)
-    unsigned	short	id;				// Packet ID (set to a random value)
-    unsigned	short	frag_off;		// Fragment offset (usually 0)
-    unsigned	char	ttl;			// Time to live (e.g., 64)
-    unsigned	char	protocol;		// TCP = 6
-    unsigned	short	check;			// IP checksum (calculated later)
-    struct		in_addr	saddr;			// Source IP (your IP)
-    struct		in_addr	daddr;			// Destination IP (target IP)
+	unsigned	char	ihl : 4;		// Header length (5 = 20 bytes)
+	unsigned	char	version : 4;	// Version (4 for IPv4)
+	unsigned	char	tos;			// Type of service (usually 0)
+	unsigned	short	tot_len;		// Total length (IP header + payload)
+	unsigned	short	id;				// Packet ID (set to a random value)
+	unsigned	short	frag_off;		// Fragment offset (usually 0)
+	unsigned	char	ttl;			// Time to live (e.g., 64)
+	unsigned	char	protocol;		// TCP = 6
+	unsigned	short	check;			// IP checksum (calculated later)
+	struct		in_addr	saddr;			// Source IP (your IP)
+	struct		in_addr	daddr;			// Destination IP (target IP)
 };
 
 struct	tcphdr {
 
-    unsigned	short	source;			// Source port (random high port)
-    unsigned	short	dest;			// Destination port (e.g., 80, 443)
-    unsigned	int		seq;			// Sequence number (random)
-    unsigned	int		ack_seq;		// Acknowledgment number (0 for SYN)
-    unsigned	char	doff : 4;		// Data offset (5 = 20 bytes)
-    unsigned	char	res1 : 4;		// Reserved (0)
-    unsigned	short	flags;			// TCP flags (SYN = 0x02)
-    unsigned	short	window;			// Window size (e.g., 5840)
-    unsigned	short	check;			// TCP checksum (calculated later)
-    unsigned	short	urg_ptr;		// Urgent pointer (0)
+	unsigned	short	source;			// Source port (random high port)
+	unsigned	short	dest;			// Destination port (e.g., 80, 443)
+	unsigned	int		seq;			// Sequence number (random)
+	unsigned	int		ack_seq;		// Acknowledgment number (0 for SYN)
+	unsigned	char	doff : 4;		// Data offset (5 = 20 bytes)
+	unsigned	char	res1 : 4;		// Reserved (0)
+	unsigned	short	flags;			// TCP flags (SYN = 0x02)
+	unsigned	short	window;			// Window size (e.g., 5840)
+	unsigned	short	check;			// TCP checksum (calculated later)
+	unsigned	short	urg_ptr;		// Urgent pointer (0)
 };
 
 struct	nmap_luggage {
 
-	char				*ports;			// Contains the ports range
-    int                 *ports_num;     // int values of ports, unsorted
+	char				*ports;			// Contains the ports range //TODO delete, useless
+	int				 	*ports_num;	 	// int values of ports, unsorted
 	char				*IP;			// Target IP
 	char				*file;			// File content
-	unsigned	int		*speedup;		// Number of threads
-	char				*flags;			// String with FLAGS
+	int					speedup;		// Number of threads
+	char				*flags;			// String with FLAGS //TODO delete, useless
+	char				**scans;		// 2D array with the scan types
 };
 
 
@@ -86,9 +87,10 @@ struct	nmap_luggage {
 // UTILS
 void	print_help(void);
 int		ft_tolower(int c);
-int     ft_strlen(char *str);
-char    *ft_strdup(char *src);
-int     ft_strcmp(char *s1, char *s2);
+char	*ft_strdup(char *src);
+size_t	ft_strlen(const char *str);
+int	 	ft_strcmp(char *s1, char *s2);
+char	**ft_split(char const *s, char c);
 
 // LUGGAGE (helper structure for nmap)
 void	free_luggage(struct nmap_luggage *l);
@@ -96,24 +98,21 @@ void	luggage_init(struct nmap_luggage *l);
 int		terminator(struct nmap_luggage *l, int ret);
 
 // PORTS
-int     count_numbers(char *input, struct nmap_luggage *l);
 int		check_ports_char(char *str);
+int		count_numbers(char *input, struct nmap_luggage *l);
 
 
 // FLAGS
 int		check_ip(char *str);
 
-int     get_file_size(char *str);
-int     file_content_check(char *str);
-int		check_file(char *str, struct nmap_luggage *l);
-
-int		check_ports(char *str, struct nmap_luggage *l);
-
-int		check_scan(char *str);
+int	 	get_file_size(char *str);
+int	 	file_content_check(char *str);
+int		flag_syntax_checker(char *str);
 
 int		check_speedup(char *str);
-
-int		flag_syntax_checker(char *str);
+int		check_file(char *str, struct nmap_luggage *l);
+int		check_scan(char *str, struct nmap_luggage *l);
+int		check_ports(char *str, struct nmap_luggage *l);
 
 
 #endif

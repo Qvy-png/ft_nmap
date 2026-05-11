@@ -127,16 +127,64 @@ int check_ports(char *str, struct nmap_luggage *l)
 	else if (ret == -1)
 		return EXIT_FAILURE;
 
+	// TODO DELETE THIS ONCE IT ALL WORKS, AND DELETE l->ports FROM STRUCT
+	l->ports = ft_strdup(str);
+
+	return EXIT_SUCCESS;
+}
+
+
+int	check_scan_chars(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if ((str[i] >= 'A' && str[i] <= 'Z') || str[i] == ',')
+			i++;
+		else
+			return (printf("`--scan error: '%c' is not a valid char\n", str[i]), EXIT_FAILURE);
+	}
+	return EXIT_SUCCESS;
+}
+
+int	check_scan_value(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while(tab[i] != NULL)
+	{
+		if (ft_strcmp(tab[i], "SYN") != EXIT_SUCCESS && \
+			ft_strcmp(tab[i], "NULL") != EXIT_SUCCESS && \
+			ft_strcmp(tab[i], "ACK") != EXIT_SUCCESS && \
+			ft_strcmp(tab[i], "FIN") != EXIT_SUCCESS && \
+			ft_strcmp(tab[i], "XMAS") != EXIT_SUCCESS && \
+			ft_strcmp(tab[i], "UDP") != EXIT_SUCCESS)
+		{
+			return EXIT_FAILURE;
+		}
+		i++;
+	}
 	return EXIT_SUCCESS;
 }
 
 //TODO
 // for --scan, needs only uppercase alpha, ',' and must be a valid flag between SYN, NULL, ACK, FIN, XMAS, and UDP
 // TODO put it in a 2D array to easily navigate through the flags to use
-int	check_scan(char *str)
+int	check_scan(char *str, struct nmap_luggage *l)
 {
-	(void)str;
-
+	if (check_scan_chars(str) == EXIT_FAILURE)
+		return EXIT_FAILURE;
+	// split for the different scans
+	// TODO alloc the original string (unsure if it's useful or not)
+	// TODO alloc the parsed strings
+	l->scans = ft_split(str, ',');
+	if (l->scans == NULL)
+		return EXIT_MALLOCS;
+	if (check_scan_value(l->scans) == EXIT_FAILURE)
+		return EXIT_FAILURE;
 	return EXIT_SUCCESS;
 }
 

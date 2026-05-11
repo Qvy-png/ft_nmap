@@ -35,12 +35,20 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 			return EXIT_MALLOCS;
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
-	{ //TODO do that 
+	{ //TODO do that
 		if (l->flags != NULL)
 			return EXIT_DOUBLES;
 
-		if (check_scan(arg) == EXIT_FAILURE)
+		ret = check_scan(arg, l);
+		if (ret  == EXIT_FAILURE)
 			return EXIT_FAILURE;
+		else if (ret == EXIT_MALLOCS)
+			return EXIT_MALLOCS;
+		//TODO DELETE THIS ONCE IT WORKS, IT CAN'T EXIST YET
+		// l->scans
+		l->flags = ft_strdup(arg);
+		
+
 	}
 	else if (ft_strcmp(flag, ARG_PORTS) == 0)
 	{
@@ -52,11 +60,14 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	}
 	else if (ft_strcmp(flag, ARG_SPEEDUP) == 0)
 	{ // TODO add the speedup in the struct
-		if (l->speedup != NULL)
+		if (l->speedup != -1)
 			return EXIT_DOUBLES;
 	
 		if (check_speedup(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
+
+		//TODO DELETE THIS ONCE IT WORKS, IT CAN'T EXIST YET
+		l->speedup = atoi(arg);
 	}
 	else
 		return EXIT_UNKNOWN;
@@ -112,6 +123,29 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 	return EXIT_SUCCESS;
 }
 
+void	print_debug_separator(void)
+{
+	printf("\n/////////////////////////////////////////////////\n\n");
+}
+
+void	print_luggage(struct nmap_luggage *l)
+{
+
+	print_debug_separator();
+	if (l->IP)
+		printf("--ip\n\n	l->IP value : %s\n", l->IP);
+	else
+		printf("--ip\n\nl->file value :\n\n%s\n", l->file);
+	print_debug_separator();
+	printf("--ports\n\nl->ports value :\n\n%s\n", l->ports);
+	print_debug_separator();
+	printf("--speedup\n\nl->speedup value :\n\n%d\n", l->speedup);
+	print_debug_separator();
+	printf("--scan\n\nl->flags value :\n\n%s\n", l->flags);
+	print_debug_separator();
+	// printf("--ports value : %s\n", l->ports);
+
+}
 
 int main(int argc, char **argv)
 {
@@ -139,7 +173,9 @@ int main(int argc, char **argv)
 	//TODO if no port has been input, initialize to ports 1-1024 by default, fill l->ports and l->ports_num
 	//TODO do a little vizualizer function to go through the struct and display the data
 
-	printf("hello world?\n");
+	// printf("hello world?\n");
+
+	print_luggage(l);
 	// TODO put this in a function and handle clean exit if failure
 	// int raw_socket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
 	// if (raw_socket < 0) {
