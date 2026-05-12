@@ -203,7 +203,7 @@ int	check_speedup(char *str)
 	}
 	num = atoi(str);
 	if (num < 0 || num > 250)
-		return EXIT_FAILURE;
+		return (printf("`--speedup` error: argument needs to be in interval [0-250]\n"), EXIT_FAILURE);
 
 	return EXIT_SUCCESS;
 }
