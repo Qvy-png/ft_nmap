@@ -118,17 +118,16 @@ int check_ports(char *str, struct nmap_luggage *l)
 {
 	int	ret;
 
-	// if (check_ports_char(str) == EXIT_FAILURE)
-	// 	return EXIT_FAILURE;
-	// needs to check numbers from range
 	ret = count_numbers(str, l);
 	if (ret == -2)
 		return EXIT_MALLOCS;
 	else if (ret == -1)
 		return EXIT_FAILURE;
 
-	// TODO DELETE THIS ONCE IT ALL WORKS, AND DELETE l->ports FROM STRUCT
 	l->ports = ft_strdup(str);
+	if (l->ports == NULL)
+		return EXIT_MALLOCS;
+	l->ports_count = ret;
 
 	return EXIT_SUCCESS;
 }
@@ -170,16 +169,13 @@ int	check_scan_value(char **tab)
 	return EXIT_SUCCESS;
 }
 
-//TODO
 // for --scan, needs only uppercase alpha, ',' and must be a valid flag between SYN, NULL, ACK, FIN, XMAS, and UDP
-// TODO put it in a 2D array to easily navigate through the flags to use
 int	check_scan(char *str, struct nmap_luggage *l)
 {
 	if (check_scan_chars(str) == EXIT_FAILURE)
 		return EXIT_FAILURE;
+
 	// split for the different scans
-	// TODO alloc the original string (unsure if it's useful or not)
-	// TODO alloc the parsed strings
 	l->scans = ft_split(str, ',');
 	if (l->scans == NULL)
 		return EXIT_MALLOCS;
@@ -196,10 +192,9 @@ int	check_speedup(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] >= '0' && str[i] <= '9')
-			i++;
-		else
+		if (str[i] < '0' || str[i] > '9')
 			return EXIT_FAILURE;
+		i++;
 	}
 	num = atoi(str);
 	if (num < 0 || num > 250)

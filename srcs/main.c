@@ -6,7 +6,7 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 
 	ret = -1;
 	if (ft_strcmp(flag, ARG_IP) == 0)
-	{  //TODO check if values are filled up in struct
+	{
 		if (l->file != NULL)
 			return EXIT_CHOOSER;
 		if (l->IP != NULL)
@@ -22,21 +22,19 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 		}
 	}
 	else if (ft_strcmp(flag, ARG_FILE) == 0)
-	{ //TODO check if values are filled up in struct
+	{
 		if (l->IP != NULL)
 			return EXIT_CHOOSER;
 		if (l->file != NULL)
 			return EXIT_DOUBLES;
 
 		ret = check_file(arg, l);
-		if (ret == EXIT_FAILURE)
-			return EXIT_FAILURE;
-		else if (ret == EXIT_MALLOCS)
-			return EXIT_MALLOCS;
+		if (ret != EXIT_SUCCESS)
+			return ret;
 	}
 	else if (ft_strcmp(flag, ARG_SCAN) == 0)
-	{ //TODO do that
-		if (l->flags != NULL)
+	{
+		if (l->scans != NULL)
 			return EXIT_DOUBLES;
 
 		ret = check_scan(arg, l);
@@ -44,17 +42,11 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 			return EXIT_FAILURE;
 		else if (ret == EXIT_MALLOCS)
 			return EXIT_MALLOCS;
-		//TODO DELETE THIS ONCE IT WORKS, IT CAN'T EXIST YET
-		// l->scans
-		l->flags = ft_strdup(arg);
-		
-
 	}
 	else if (ft_strcmp(flag, ARG_PORTS) == 0)
 	{
 		if (l->ports != NULL)
 			return EXIT_DOUBLES;
-		// TODO check if both ports and ports_num are filled up. You might not need l->ports in the future though.
 		ret = check_ports(arg, l);
 		if (ret == EXIT_FAILURE)
 			return EXIT_FAILURE;
@@ -74,26 +66,10 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	return EXIT_SUCCESS;
 }
 
-int	default_ports_filler(struct nmap_luggage *l)
-{
-	printf("`--ports` not found, setting default to 1-1024\n");
-
-	if (check_ports("1-1024", l) == EXIT_FAILURE)
-		return EXIT_FAILURE;
-	return EXIT_SUCCESS;
-}
-
-// TODO
-int	default_scans_filler(struct nmap_luggage *l)
-{
-	check_scan("SYN,NULL,ACK,FIN,XMAS,UDP", l);
-
-	return EXIT_SUCCESS;
-}
-
 int	handle_args(char **argv, struct nmap_luggage *l)
 {
 	int i;
+	int	ret;
 	int	ret_matcher;
 
 	i = 1;
@@ -138,38 +114,66 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 		i++;
 	}
 
-	//TODO if no port has been input, initialize to ports 1-1024 by default, fill l->ports and l->ports_num, as well as l->scans
-
 	if (l->ports_num == NULL)
-		default_ports_filler(l);
+	{
+		printf("`--ports` not found, setting default to 1-1024\n");
+		ret = check_ports("1-1024", l);
+		if (ret != EXIT_SUCCESS)
+			return ret;
+	}
 
 	if (l->scans == NULL)
-		default_scans_filler(l);
+	{
+		printf("`--scans` not found, using all scans\n");
+		ret = check_scan("SYN,NULL,ACK,FIN,XMAS,UDP", l);
+		if (ret != EXIT_SUCCESS)
+			return ret;
+	}
 
 	return EXIT_SUCCESS;
 }
 
-void	print_debug_separator(void)
+void	pds(int flag)
 {
-	printf("\n/////////////////////////////////////////////////\n\n");
+	if (flag == 1)
+		printf("\n--------------------\\\n\n");
+	else if (flag == 2)
+		printf("\n--------------------|\n");
+	else
+		printf("\n--------------------/\n\n");
 }
 
 void	print_luggage(struct nmap_luggage *l)
 {
+	int	i;
 
-	print_debug_separator();
+	// ip or file hostnames
+	pds(1);
 	if (l->IP)
-		printf("--ip\n\nl->IP value :\n\n%s\n", l->IP);
+		printf("--ip\n\n%s\n", l->IP);
 	else
-		printf("--ip\n\nl->file value :\n\n%s\n", l->file);
-	print_debug_separator();
-	printf("--ports\n\nl->ports value :\n\n%s\n%d\n", l->ports, l->ports_num[0]);
-	print_debug_separator();
-	printf("--speedup\n\nl->speedup value :\n\n%d\n", l->speedup);
-	print_debug_separator();
-	printf("--scan\n\nl->flags value :\n\n%s\n", l->scans[0]);
-	print_debug_separator();
+		printf("--file\n\n%s\n", l->file);
+	pds(2);
 
+	// ports value
+	i = 0;
+	printf("\n--ports\n\n\"%s\"\n\n", l->ports);
+	while (i < l->ports_count)
+		printf("%d ", l->ports_num[i++]);
+	printf("\n");
+	pds(2);
+
+	// speedup value
+	printf("\n--speedup\n\n%d\n", l->speedup);
+	pds(2);
+
+	// scans values
+	i = 0;
+	printf("\n--scan\n\n");
+	while (l->scans[i] != NULL)
+		printf("%s ", l->scans[i++]);
+	printf("\n");
+	pds(3);
 }
 
 int main(int argc, char **argv)
@@ -178,10 +182,7 @@ int main(int argc, char **argv)
 	struct nmap_luggage	*l;
 
 	if (argc <= 1)
-	{
-		print_help();
-		return EXIT_SUCCESS;
-	}
+		return (print_help(), EXIT_SUCCESS);
 
 	l = malloc(sizeof(struct nmap_luggage) + 1);
 	if (l == NULL)
@@ -194,11 +195,10 @@ int main(int argc, char **argv)
 	else if (ret_arg == EXIT_MALLOCS)
 		return (printf("Stopping here, memory allocation has failed somewhere..\n"), terminator(l, EXIT_MALLOCS));
 	
-	//DONE check if the minimum amount of flags have been gathered to proceed with packet forming
 	if (l->file == NULL && l->IP == NULL)
 		return terminator(l, EXIT_FAILURE);
 
-	//TODO do a little vizualizer function to go through the struct and display the data
+	//TODO do a better vizualiser, something compact, to remind before ft_nmap-ing stuff
 	print_luggage(l);
 
 	// printf("hello world?\n");

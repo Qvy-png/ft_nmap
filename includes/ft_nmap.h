@@ -72,12 +72,12 @@ struct	tcphdr {
 
 struct	nmap_luggage {
 
-	char				*ports;			// Contains the ports range //TODO delete, useless
+	char				*ports;			// Contains the ports range
 	int				 	*ports_num;	 	// int values of ports, unsorted
+	int					ports_count;
 	char				*IP;			// Target IP
 	char				*file;			// File content
 	int					speedup;		// Number of threads
-	char				*flags;			// String with FLAGS //TODO delete, useless
 	char				**scans;		// 2D array with the scan types
 };
 

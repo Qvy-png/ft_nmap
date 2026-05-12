@@ -157,10 +157,12 @@ int		process_token(char *token, int start, int end, int **numbers, int *size, in
 			return (printf("`--ports error: exceeding max port value\n"), EXIT_FAILURE);
 
 		ret = add_number(numbers, size, capacity, value);
-        if (ret == EXIT_FAILURE)
-            return EXIT_FAILURE;
-		else if (ret == EXIT_MALLOCS)
-			return EXIT_MALLOCS;
+        if (ret != EXIT_SUCCESS)
+            return ret;
+        // if (ret == EXIT_FAILURE)
+        //     return EXIT_FAILURE;
+		// else if (ret == EXIT_MALLOCS)
+		// 	return EXIT_MALLOCS;
 
         return EXIT_SUCCESS;
     }
@@ -184,10 +186,12 @@ int		process_token(char *token, int start, int end, int **numbers, int *size, in
     while (i <= right)
     {
 		ret = add_number(numbers, size, capacity, i);
-        if (ret == EXIT_FAILURE)
-            return EXIT_FAILURE;
-		else if (ret == EXIT_MALLOCS)
-			return EXIT_MALLOCS;
+        if (ret != EXIT_SUCCESS)
+            return ret;
+        // if (ret == EXIT_FAILURE)
+        //     return EXIT_FAILURE;
+		// else if (ret == EXIT_MALLOCS)
+		// 	return EXIT_MALLOCS;
         i++;
     }
 
