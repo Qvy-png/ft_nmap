@@ -2,17 +2,20 @@ NAME = ft_nmap
 
 CC = cc
 
+SRCS = srcs
+
 CFLAGS = -Wall -Werror -Wextra -g3
 
 RM = rm
 
 OBJ = $(SRC:.c=.o)
 
-SRC =	srcs/main.c		\
-		srcs/utils.c	\
-		srcs/ports.c	\
-		srcs/flags.c	\
-		srcs/luggage.c
+SRC =	$(SRCS)/main.c		\
+		$(SRCS)/utils.c		\
+		$(SRCS)/ports.c		\
+		$(SRCS)/flags.c		\
+		$(SRCS)/luggage.c	\
+		$(SRCS)/threads.c
 		
 INCL =	includes/ft_nmap.h
 

@@ -132,7 +132,7 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 	if (l->speedup == -1)
 	{
 		printf("`--speedup` not found, using default value (0)\n");
-		l->speedup = 0;
+		l->speedup = 1;
 	}
 
 	return EXIT_SUCCESS;
@@ -229,11 +229,10 @@ int main(int argc, char **argv)
 	if (l->file == NULL && l->IP == NULL)
 		return terminator(l, EXIT_FAILURE);
 
-	//TODO do a better vizualiser, something compact, to remind before ft_nmap-ing stuff
-	// print_luggage(l);
-	print_sumup(l);
+	// print_sumup(l);
 
-	// printf("hello world?\n");
+	thread_creator(l);
+
 
 	// TODO put this in a function and handle clean exit if failure
 	// int raw_socket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);

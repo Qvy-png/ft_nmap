@@ -7,6 +7,7 @@
 # include <unistd.h>
 # include <time.h>
 # include <fcntl.h>
+# include <stdbool.h>
 
 // thread libraries
 # include <pthread.h>
@@ -76,16 +77,20 @@ struct	nmap_luggage {
 	int				 	*ports_num;	 	// int values of ports, unsorted
 	int					ports_count;	// number of ports
 
-
 	char				*IP;			// Target IP
 	char				*file;			// File content
 	char				**file_content;	// File content as a 2D array
 
 	int					speedup;		// Number of threads
-	
+
 	char				*flags;			// String with FLAGS
 	char				**scans;		// 2D array with the scan types
 };
+
+typedef struct {
+    bool avaiable;
+    pthread_t thread;
+} threadrec_t;
 
 
 // FUNCTIONS //
@@ -119,6 +124,10 @@ int		check_speedup(char *str);
 int		check_file(char *str, struct nmap_luggage *l);
 int		check_scan(char *str, struct nmap_luggage *l);
 int		check_ports(char *str, struct nmap_luggage *l);
+
+// THREADS
+
+int		thread_creator(struct nmap_luggage *l);
 
 
 #endif
