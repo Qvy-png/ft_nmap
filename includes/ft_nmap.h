@@ -74,10 +74,16 @@ struct	nmap_luggage {
 
 	char				*ports;			// Contains the ports range
 	int				 	*ports_num;	 	// int values of ports, unsorted
-	int					ports_count;
+	int					ports_count;	// number of ports
+
+
 	char				*IP;			// Target IP
 	char				*file;			// File content
+	char				**file_content;	// File content as a 2D array
+
 	int					speedup;		// Number of threads
+	
+	char				*flags;			// String with FLAGS
 	char				**scans;		// 2D array with the scan types
 };
 

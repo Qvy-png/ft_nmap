@@ -98,6 +98,10 @@ int	check_file(char *str, struct nmap_luggage *l)
 	l->file = ft_strdup(file_content);
 	if (l->file == NULL)
 		return (free(file_content), EXIT_MALLOCS);
+
+	l->file_content = ft_split(file_content, '\n');
+	if (l->file_content == NULL)
+		return (free(file_content), EXIT_MALLOCS);
 	free(file_content);
 	return EXIT_SUCCESS;
 }
@@ -181,6 +185,9 @@ int	check_scan(char *str, struct nmap_luggage *l)
 		return EXIT_MALLOCS;
 	if (check_scan_value(l->scans) == EXIT_FAILURE)
 		return EXIT_FAILURE;
+	l->flags = ft_strdup(str);
+	if (l->flags == NULL)
+		return EXIT_MALLOCS;
 	return EXIT_SUCCESS;
 }
 

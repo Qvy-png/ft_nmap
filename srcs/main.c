@@ -55,7 +55,6 @@ int	flag_to_arg_matcher(char *flag, char *arg, struct nmap_luggage *l)
 	{
 		if (l->speedup != -1)
 			return EXIT_DOUBLES;
-	
 		if (check_speedup(arg) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 
@@ -130,6 +129,12 @@ int	handle_args(char **argv, struct nmap_luggage *l)
 			return ret;
 	}
 
+	if (l->speedup == -1)
+	{
+		printf("`--speedup` not found, using default value (0)\n");
+		l->speedup = 0;
+	}
+
 	return EXIT_SUCCESS;
 }
 
@@ -176,6 +181,32 @@ void	print_luggage(struct nmap_luggage *l)
 	pds(3);
 }
 
+void	print_sumup( struct nmap_luggage *l)
+{
+	int	i;
+
+	i = 0;
+	printf("-------------------/\n");
+	if (l->IP)
+		printf("IP(s)	: %s\n", l->IP);
+	else
+	{
+		printf("IP(s)	: ");
+		while(l->file_content[i] != NULL)
+		{
+			printf("%s", l->file_content[i++]);
+			if (l->file_content[i] != NULL)
+				printf(", ");
+		}
+		printf("\n");
+	}
+	printf("ports	: %s\n", l->ports);
+	printf("scans	: %s\n", l->flags);
+	printf("speedup	: %d\n", l->speedup);
+	printf("-------------------\\\n");
+
+}
+
 int main(int argc, char **argv)
 {
 	int					ret_arg;
@@ -199,7 +230,8 @@ int main(int argc, char **argv)
 		return terminator(l, EXIT_FAILURE);
 
 	//TODO do a better vizualiser, something compact, to remind before ft_nmap-ing stuff
-	print_luggage(l);
+	// print_luggage(l);
+	print_sumup(l);
 
 	// printf("hello world?\n");
 
