@@ -8,6 +8,16 @@
 # include <time.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <string.h>
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 // thread libraries
 # include <pthread.h>
@@ -87,11 +97,15 @@ struct	nmap_luggage {
 	char				**scans;		// 2D array with the scan types
 };
 
-typedef struct {
-    bool avaiable;
-    pthread_t thread;
-} threadrec_t;
-
+// typedef struct {
+//     struct nmap_luggage **tasks;
+//     int count;
+//     int size;
+//     int front;
+//     int rear;
+//     pthread_mutex_t mutex;
+//     pthread_cond_t cond;
+// } ThreadPool;
 
 // FUNCTIONS //
 
